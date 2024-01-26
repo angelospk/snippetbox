@@ -25,7 +25,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	ts, err := template.ParseFiles(files...)
 	// ts, err := template.ParseFiles("../../ui/html/pages/home.tmpl")
 	if err != nil {
-		app.errorLog.Println(err.Error())
+		app.serverError(w, err)
 		http.Error(w, "Internal Server Error", 500)
 		return
 	}
@@ -37,7 +37,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	err = ts.ExecuteTemplate(w, "base", nil)
 	// err = ts.Execute(w, nil)
 	if err != nil {
-		app.errorLog.Println(err.Error())
+		app.serverError(w, err)
 		http.Error(w, "Internal Server Error", 500)
 	}
 }
@@ -45,17 +45,20 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil || id < 1 {
-		http.NotFound(w, r)
+		app.notFound(w)
 		return
 	}
 
 	fmt.Fprintf(w, "Display a specific snippet with ID %d...", id)
 }
 
+// snippetCreate handles the creation of a new snippet via HTTP POST method.
+//
+// It takes http.ResponseWriter and *http.Request as parameters and does not return any value.
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.Header().Set("Allow", http.MethodPost)
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		app.clientError(w, http.StatusMethodNotAllowed)
 		return
 	}
 

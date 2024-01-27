@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 // Define an application struct to hold the application-wide dependencies for the
@@ -15,7 +17,19 @@ type application struct {
 	infoLog  *log.Logger
 }
 
+// load environment variables
+func init() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+}
+
 func main() {
+	log.Print("hello." + " there test." + os.Getenv("db_password"))
+	//get and prin an environmental variable called db_password
+
+	log.Println("another test from env:", os.Getenv("dbtest"))
 	addr := flag.String("addr", ":4000", "HTTP network address")
 	flag.Parse()
 

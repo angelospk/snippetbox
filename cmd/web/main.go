@@ -9,6 +9,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
+	"snippetbox.haroldpoi.co/internal/models"
 )
 
 // Define an application struct to hold the application-wide dependencies for the
@@ -17,6 +18,7 @@ import (
 type application struct {
 	errorLog *log.Logger
 	infoLog  *log.Logger
+	snippets *models.SnippetModel
 }
 
 // load environment variables
@@ -31,9 +33,8 @@ func main() {
 
 	addr := flag.String("addr", ":4000", "HTTP network address")
 	flag.Parse()
-
 	// Define a new command-line flag for the MySQL DSN string.
-	connectString := "harold:" + os.Getenv(("db_password")) + "@/snippetbox?parseTime=true"
+	connectString := "harold:Test.1234@/snippetbox?parseTime=true"
 	println(connectString)
 	dsn := flag.String("dsn", connectString, "MySQL data source name")
 
@@ -55,6 +56,7 @@ func main() {
 	app := &application{
 		errorLog: errorLog,
 		infoLog:  infoLog,
+		snippets: &models.SnippetModel{DB: db},
 	}
 
 	// http.Server struct

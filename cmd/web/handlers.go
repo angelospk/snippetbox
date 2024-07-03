@@ -62,3 +62,11 @@ func snippetCreate(w http.ResponseWriter, r *http.Request) {
 
 	w.Write([]byte("Create a new snippet..."))
 }
+
+func new(w http.ResponseWriter, r *http.Request) {
+	component := hello("Thomas")
+	c2 := hello("John")
+	component.Render(r.Context(), w)
+	c2.Render(r.Context(), w)
+
+}

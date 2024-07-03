@@ -6,9 +6,11 @@ import (
 )
 
 func main() {
+	// component := hello("John")
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", home)
-	mux.HandleFunc("/snippet/view", snippetView)
+	mux.HandleFunc("/new", new)
+	mux.HandleFunc("/snippet/view/{id}", snippetView)
 	mux.HandleFunc("/snippet/create", snippetCreate)
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 
